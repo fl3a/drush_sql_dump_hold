@@ -65,11 +65,11 @@ function drush_sqlbackup_post_sql_dump_execute($db_spec = NULL) {
         return drush_log(dt("Purged dumps:\n!dumps", array('!dumps' => implode("\n", $purge))), 'success');
       }
       else {
-        return drush_log('No files to purge', 'notice');
+        return drush_log(dt('No files to purge', 'notice'));
       }
     }
   }
   else {
-    return drush_log('Missing --result-file option.', 'error');
+    return drush_log(dt('Missing --result-file option.', 'error'));
   }
 }

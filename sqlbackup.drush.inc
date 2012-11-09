@@ -37,37 +37,35 @@ function drush_sqlbackup_post_sql_dump_execute($db_spec = NULL) {
     unset($path[count($path) - 1]);
     $path = implode('/', $path);
     (count($path)) ? $path : $path = realpath(getcwd());
-    if (is_dir($path)) {
-      if($dh = opendir($path)) {
-        while ($filename = readdir($dh)) {
-          $file = $path . '/' .  $filename;
-          $path_parts = pathinfo($file);
-          if ((is_file($file)) && ($path_parts['extension'] == 'sql' || $path_parts['extension'] == 'gz')) {
-            // use created time for order...
-            $ctime = filectime($file); 
-            $files[$ctime] = $file;
-          }
+    if($dh = opendir($path)) {
+      while ($filename = readdir($dh)) {
+        $file = $path . '/' .  $filename;
+        $path_parts = pathinfo($file);
+        if ((is_file($file)) && ($path_parts['extension'] == 'sql' || $path_parts['extension'] == 'gz')) {
+          // use created time for order...
+          $ctime = filectime($file); 
+          $files[$ctime] = $file;
         }
-        // sort and reverse order
-        ksort($files);
-        $files = array_reverse($files);
+      }
+      // sort and reverse order
+      ksort($files);
+      $files = array_reverse($files);
 
-        // slice array at $hold to get items to purge
-        $purge = array_slice($files, $hold);
+      // slice array at $hold to get items to purge
+      $purge = array_slice($files, $hold);
 
-        if (count($purge)) {        
-          drush_print(dt("The following dumps will be purged:\n!dumps",array("!dumps" => implode("\n", $purge))));
-          if (!drush_confirm(dt('Do you really want to continue?'))) {          
-            return drush_user_abort();
-          }
-          foreach ($purge as $file) {
-            unlink($file);
-          }	
-          return drush_log(dt("Purged dumps:\n!dumps", array('!dumps' => implode("\n", $purge))), 'success');
+      if (count($purge)) {        
+        drush_print(dt("The following dumps will be purged:\n!dumps",array("!dumps" => implode("\n", $purge))));
+        if (!drush_confirm(dt('Do you really want to continue?'))) {          
+          return drush_user_abort();
         }
-        else {
-          return drush_log('No files to purge', 'notice');
-        }
+        foreach ($purge as $file) {
+          unlink($file);
+        }	
+        return drush_log(dt("Purged dumps:\n!dumps", array('!dumps' => implode("\n", $purge))), 'success');
+      }
+      else {
+        return drush_log('No files to purge', 'notice');
       }
     }
   }

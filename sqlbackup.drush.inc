@@ -36,6 +36,7 @@ function drush_sqlbackup_post_sql_dump_execute($db_spec = NULL) {
     $path = explode('/', realpath($file));
     unset($path[count($path) - 1]);
     $path = implode('/', $path);
+    (count($path)) ? $path : $path = realpath(getcwd());
     if (is_dir($path)) {
       if($dh = opendir($path)) {
         while ($filename = readdir($dh)) {
@@ -55,22 +56,22 @@ function drush_sqlbackup_post_sql_dump_execute($db_spec = NULL) {
         $purge = array_slice($files, $hold);
 
         if (count($purge)) {        
-          if (drush_confirm(dt("Do you really want to purge the following dumps:\n!dumps", 
-              array("!dumps" => implode("\n", $purge))))) 
-          {
-            foreach ($purge as $file) {
-              unlink($file);
-            }	
-            drush_log(dt("Purged dumps:\n!dumps", array('!dumps' => implode("\n", $purge))), 'success');
+          drush_print(dt("The following dumps will be purged:\n!dumps",array("!dumps" => implode("\n", $purge))));
+          if (!drush_confirm(dt('Do you really want to continue?'))) {          
+            return drush_user_abort();
           }
-          else {
-            drush_print(dt('Aborting.'));
-          }
+          foreach ($purge as $file) {
+            unlink($file);
+          }	
+          return drush_log(dt("Purged dumps:\n!dumps", array('!dumps' => implode("\n", $purge))), 'success');
         }
         else {
-          drush_print(dt('No files to purge'));
+          return drush_log('No files to purge', 'notice');
         }
       }
     }
+  }
+  else {
+    return drush_log('Missing --result-file option.', 'error');
   }
 }

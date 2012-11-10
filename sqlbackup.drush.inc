@@ -8,11 +8,11 @@
 /**
  * Implements hook_drush_help_alter().
  *
- * Adds --hold option to drush's sql-dump command
+ * Adds --hold option to drush's core sql-dump command
  */
 function sqlbackup_drush_help_alter(&$command) {
   if ($command['command'] == 'sql-dump') {
-    $command['options']['hold'] = 'Hold the number of dumps, before purging oldest.';
+    $command['options']['hold'] = 'Hold the number of dumps, before purging oldest, if combined with result-file option.',
   }
 }
 
@@ -24,12 +24,18 @@ function sqlbackup_drush_help_alter(&$command) {
  */
 function drush_sqlbackup_post_sql_dump_execute($db_spec = NULL) {
   $file = drush_get_option('result-file', FALSE);
+  
+  // do nothing without specified result-file option
+  if (!$file) {
+    return;
+  }
+
   $hold = drush_get_option('hold', FALSE);
 
   // no drush_hook_COMMAND_validate() here, 
   // we want a proper execution of sql-dump and skip only purging/drush_hook_post_COMMAND()
-  if ($hold && !is_numeric($hold)) {
-    return drush_log('Hold option is not numeric.', 'error');  
+  if (!is_numeric($hold)) {
+    return drush_log(dt('Hold option is not numeric.', 'error'));  
   }
 
   if ($file && $hold) {

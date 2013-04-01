@@ -24,13 +24,12 @@ function sql_dump_hold_drush_help_alter(&$command) {
  */
 function drush_sql_dump_hold_post_sql_dump_execute($db_spec = NULL) {
   $file = drush_get_option('result-file', FALSE);
+  $hold = drush_get_option('hold', FALSE);
 
   // do nothing without specified result-file option
-  if (!$file) {
+  if (!$file || !$hold) {
     return;
   }
-
-  $hold = drush_get_option('hold', FALSE);
 
   // no drush_hook_COMMAND_validate() here, 
   // we want a proper execution of sql-dump and skip only purging/drush_hook_post_COMMAND()

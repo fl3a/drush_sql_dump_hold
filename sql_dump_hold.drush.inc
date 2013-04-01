@@ -24,7 +24,7 @@ function sql_dump_hold_drush_help_alter(&$command) {
  */
 function drush_sql_dump_hold_post_sql_dump_execute($db_spec = NULL) {
   $file = drush_get_option('result-file', FALSE);
-  
+
   // do nothing without specified result-file option
   if (!$file) {
     return;
@@ -39,6 +39,14 @@ function drush_sql_dump_hold_post_sql_dump_execute($db_spec = NULL) {
   }
 
   if ($file && $hold) {
+    // make sure @DATABASE and @DATE tokens in result-file option
+    // are processed the same way as drush_sql_build_dump_command()
+    if (is_null($db_spec)) {
+      $db_spec = _drush_sql_get_db_spec();
+    }
+    $database = $db_spec['database'];
+    $file = str_replace(array('@DATABASE', '@DATE'), array($database, gmdate('Ymd_his')), $file);
+
     $path = explode('/', realpath($file));
     unset($path[count($path) - 1]);
     $path = implode('/', $path);

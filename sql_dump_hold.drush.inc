@@ -26,7 +26,7 @@ function drush_sql_dump_hold_post_sql_dump_execute($db_spec = NULL) {
   $file = drush_get_option('result-file', FALSE);
   $hold = drush_get_option('hold', FALSE);
 
-  // do nothing without specified result-file option
+  // do nothing without specified result-file or hold option
   if (!$file || !$hold) {
     return;
   }
@@ -36,6 +36,7 @@ function drush_sql_dump_hold_post_sql_dump_execute($db_spec = NULL) {
   if (!is_numeric($hold)) {
     return drush_log(dt('Hold option is not numeric.'), 'error');  
   }
+
 
   if ($file && $hold) {
     $path = explode('/', $file);
@@ -76,8 +77,5 @@ function drush_sql_dump_hold_post_sql_dump_execute($db_spec = NULL) {
         return drush_log(dt('No files to purge'), 'notice');
       }
     }
-  }
-  else {
-    return drush_log(dt('Missing --result-file option.'), 'error');
   }
 }

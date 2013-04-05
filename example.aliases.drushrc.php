@@ -12,7 +12,7 @@
 #  'command-specific' => array (
 #    'sql-dump' => array(
 #      'result-file' => TRUE,
-#      'result-file' => '/path/to/dump-dir/' . date('Ymd-His') . '.sql',
+#      'result-file' => '/path/to/dump-dir/@DATABASE_@DATE.sql',
 #      'gzip' => TRUE,
 #      'structure-tables-key' => 'common',
 #      'hold' => 31,

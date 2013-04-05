@@ -38,7 +38,7 @@ function drush_sql_dump_hold_post_sql_dump_execute($db_spec = NULL) {
   }
 
   if ($file && $hold) {
-    $path = explode('/', realpath($file));
+    $path = explode('/', $file);
     unset($path[count($path) - 1]);
     $path = implode('/', $path);
     (count($path)) ? $path = $path : $path = realpath(getcwd());

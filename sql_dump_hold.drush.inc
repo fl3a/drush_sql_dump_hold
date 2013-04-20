@@ -12,7 +12,11 @@
  */
 function sql_dump_hold_drush_help_alter(&$command) {
   if ($command['command'] == 'sql-dump') {
-    $command['options']['hold'] = 'Hold the number of dumps, before purging oldest, if combined with result-file option.';
+      $command['options']['hold'] = array(
+      'description' => 'Hold the number of dumps, before purging oldest, if combined with result-file option.',
+      'example-value' => '31',
+      'value' => 'required',
+    );    
   }
 }
 

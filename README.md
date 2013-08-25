@@ -7,7 +7,7 @@ to drush's core sql-dump command,
 which lets you hold specified amount of sql dumps,
 before purging oldest above e.g. 31 in path from --target-file (extracted path or pwd)
 
-Perhaps useful for periodic execution of drush sql-dump?!
+**Perhaps useful for periodic execution of drush sql-dump?!**
 
 ## Installation
 

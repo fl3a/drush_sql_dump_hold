@@ -38,5 +38,5 @@ to add the hold option to Drush's `sql-dump` command.
 
 ## Documentation
 
-- @see [Blog post about drush_sql_dump](http://www.reinblau.de/news/entwicklung-neue-option-fuer-drush-sql-dump_hold) (in german)
-- @see [example.aliases.drushrc.php](http://drupalcode.org/project/drush_sql_dump_hold.git/blob_plain/HEAD:/example.aliases.drushrc.php) for options
+- [Blog post about drush_sql_dump](https://reinblau.de/de/news/entwicklung-neue-option-fuer-drush-sql-dump) (in german)
+- [example.aliases.drushrc.php](http://drupalcode.org/project/drush_sql_dump_hold.git/blob_plain/HEAD:/example.aliases.drushrc.php) for options

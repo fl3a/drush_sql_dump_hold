@@ -21,12 +21,10 @@ function sql_dump_hold_drush_help_alter(&$command) {
 }
 
 /**
- * Implements drush_hook_post_COMMAND().
- *
  * Hold the number of dumps, before purging oldest,
  * if hold and result-file option were provided
  */
-function drush_sql_dump_hold_post_sql_dump_execute($db_spec = NULL) {
+function _drush_sql_dump_hold_post_sql_dump_execute($db_spec = NULL) {
   $file = drush_get_option('result-file', FALSE);
   $hold = drush_get_option('hold', FALSE);
 
@@ -82,4 +80,18 @@ function drush_sql_dump_hold_post_sql_dump_execute($db_spec = NULL) {
       }
     }
   }
+}
+
+/**
+ * Implements drush_hook_post_COMMAND(). 
+ */
+function drush_sql_dump_hold_post_sql_dump($db_spec = NULL) {
+  _drush_sql_dump_hold_post_sql_dump_execute($db_spec);
+}
+
+/**
+ * Implements drush_hook_post_COMMAND() below drush v.7.x. 
+ */
+function drush_sql_dump_hold_post_sql_dump_execute($db_spec = NULL) {
+  _drush_sql_dump_hold_post_sql_dump_execute($db_spec);
 }
